@@ -1,0 +1,16 @@
+%{
+#include <stdio.h>
+
+%}
+
+%%
+
+"+"|"-"|"*"|"/"   { printf("Operator: %s\n", yytext); }
+.|\n              ;  // Ignore all other characters
+
+%%
+
+int main() {
+    yylex();
+    return 0;
+}
