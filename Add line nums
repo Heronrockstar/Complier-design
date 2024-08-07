@@ -1,0 +1,24 @@
+%{
+#include <stdio.h>
+
+int line_num = 1;
+%}
+
+%%
+
+\n    { printf("\n%4d ", line_num++); }
+.     { printf("%c", yytext[0]); }
+
+%%
+
+int main()
+{
+    printf("%4d ", line_num++);
+    yylex();
+    return 0;
+}
+
+int yywrap()
+{
+    return 1;
+}
