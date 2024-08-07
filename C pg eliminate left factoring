@@ -1,0 +1,58 @@
+#include <stdio.h>
+#include <string.h>
+
+void eliminateLeftFactoring(char *nonTerminal, char productions[][20], int n) {
+    char commonPrefix[20];
+    int prefixLength = 0;
+
+    for (int i = 0; i < n; i++) {
+        for (int j = i + 1; j < n; j++) {
+            int k = 0;
+            while (productions[i][k] == productions[j][k] && productions[i][k] != '\0' && productions[j][k] != '\0') {
+                k++;
+            }
+            if (k > prefixLength) {
+                prefixLength = k;
+                strncpy(commonPrefix, productions[i], k);
+                commonPrefix[k] = '\0';
+            }
+        }
+    }
+
+    if (prefixLength == 0) {
+        printf("No left factoring needed.\n");
+        return;
+    }
+
+    printf("%s -> %s%s'\n", nonTerminal, commonPrefix, nonTerminal);
+    printf("%s' ->", nonTerminal);
+    for (int i = 0; i < n; i++) {
+        if (strncmp(productions[i], commonPrefix, prefixLength) == 0) {
+            if (productions[i][prefixLength] == '\0')
+                printf(" ε");
+            else
+                printf(" %s", productions[i] + prefixLength);
+            if (i != n - 1) printf(" |");
+        }
+    }
+    printf("\n");
+}
+
+int main() {
+    char nonTerminal[20], productions[10][20];
+    int n;
+
+    printf("Enter the non-terminal: ");
+    scanf("%s", nonTerminal);
+    printf("Enter the number of productions: ");
+    scanf("%d", &n);
+
+    for (int i = 0; i < n; i++) {
+        printf("Enter production %d: ", i + 1);
+        scanf("%s", productions[i]);
+    }
+
+    eliminateLeftFactoring(nonTerminal, productions, n);
+    return 0;
+}
+
