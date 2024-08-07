@@ -1,0 +1,77 @@
+#include <stdio.h>
+#include <stdbool.h>
+#include <string.h>
+
+// Grammar: E -> T E'
+//           E' -> + T E' | ε
+//           T -> F T'
+//           T' -> * F T' | ε
+//           F -> ( E ) | id
+
+char *input;
+int pos;
+
+bool E();
+bool E_prime();
+bool T();
+bool T_prime();
+bool F();
+
+bool match(char expected) {
+    if (input[pos] == expected) {
+        pos++;
+        return true;
+    }
+    return false;
+}
+
+bool E() {
+    return T() && E_prime();
+}
+
+bool E_prime() {
+    if (match('+')) {
+        return T() && E_prime();
+    }
+    return true;  // epsilon
+}
+
+bool T() {
+    return F() && T_prime();
+}
+
+bool T_prime() {
+    if (match('*')) {
+        return F() && T_prime();
+    }
+    return true;  // epsilon
+}
+
+bool F() {
+    if (match('(')) {
+        if (E() && match(')')) {
+            return true;
+        }
+        return false;
+    } else if (input[pos] == 'i' && input[pos+1] == 'd') {
+        pos += 2;
+        return true;
+    }
+    return false;
+}
+
+int main() {
+    char expr[100];
+    printf("Enter an expression: ");
+    scanf("%s", expr);
+    input = expr;
+    pos = 0;
+
+    if (E() && input[pos] == '\0') {
+        printf("The expression is valid.\n");
+    } else {
+        printf("The expression is invalid.\n");
+    }
+
+    return 0;
+}
