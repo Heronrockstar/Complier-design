@@ -1,0 +1,65 @@
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+
+#define TABLE_SIZE 100
+
+typedef struct Symbol {
+    char name[100];
+    int address;
+    struct Symbol* next;
+} Symbol;
+
+Symbol* symbolTable[TABLE_SIZE];
+
+unsigned int hash(char *name) {
+    unsigned int hash = 0;
+    while (*name)
+        hash = (hash << 5) + *name++;
+    return hash % TABLE_SIZE;
+}
+
+void insert(char *name, int address) {
+    unsigned int index = hash(name);
+    Symbol* newSymbol = (Symbol*) malloc(sizeof(Symbol));
+    strcpy(newSymbol->name, name);
+    newSymbol->address = address;
+    newSymbol->next = symbolTable[index];
+    symbolTable[index] = newSymbol;
+}
+
+Symbol* lookup(char *name) {
+    unsigned int index = hash(name);
+    Symbol* symbol = symbolTable[index];
+    while (symbol) {
+        if (strcmp(symbol->name, name) == 0)
+            return symbol;
+        symbol = symbol->next;
+    }
+    return NULL;
+}
+
+void display() {
+    for (int i = 0; i < TABLE_SIZE; i++) {
+        Symbol* symbol = symbolTable[i];
+        while (symbol) {
+            printf("Name: %s, Address: %d\n", symbol->name, symbol->address);
+            symbol = symbol->next;
+        }
+    }
+}
+
+int main() {
+    insert("x", 100);
+    insert("y", 200);
+    insert("z", 300);
+
+    Symbol* symbol = lookup("x");
+    if (symbol)
+        printf("Found symbol: %s at address %d\n", symbol->name, symbol->address);
+    else
+        printf("Symbol not found\n");
+
+    display();
+    return 0;
+}
