@@ -1,0 +1,49 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+// Structure to represent a single instruction in the intermediate code
+typedef struct {
+    char op[10];
+    char arg1[10];
+    char arg2[10];
+    char result[10];
+} Instruction;
+
+void generateAssembly(Instruction *instructions, int n) {
+    for (int i = 0; i < n; i++) {
+        if (strcmp(instructions[i].op, "+") == 0) {
+            printf("MOV R0, %s\n", instructions[i].arg1);
+            printf("ADD R0, %s\n", instructions[i].arg2);
+            printf("MOV %s, R0\n", instructions[i].result);
+        } else if (strcmp(instructions[i].op, "-") == 0) {
+            printf("MOV R0, %s\n", instructions[i].arg1);
+            printf("SUB R0, %s\n", instructions[i].arg2);
+            printf("MOV %s, R0\n", instructions[i].result);
+        } else if (strcmp(instructions[i].op, "*") == 0) {
+            printf("MOV R0, %s\n", instructions[i].arg1);
+            printf("MUL R0, %s\n", instructions[i].arg2);
+            printf("MOV %s, R0\n", instructions[i].result);
+        } else if (strcmp(instructions[i].op, "/") == 0) {
+            printf("MOV R0, %s\n", instructions[i].arg1);
+            printf("DIV R0, %s\n", instructions[i].arg2);
+            printf("MOV %s, R0\n", instructions[i].result);
+        }
+    }
+}
+
+int main() {
+    int n;
+    printf("Enter the number of instructions: ");
+    scanf("%d", &n);
+
+    Instruction instructions[n];
+
+    for (int i = 0; i < n; i++) {
+        printf("Enter the operation, arg1, arg2, and result for instruction %d: ", i + 1);
+        scanf("%s %s %s %s", instructions[i].op, instructions[i].arg1, instructions[i].arg2, instructions[i].result);
+    }
+
+    generateAssembly(instructions, n);
+    return 0;
+}
