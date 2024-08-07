@@ -1,0 +1,37 @@
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+
+typedef struct Expression {
+    char lhs[10];
+    char rhs[20];
+} Expression;
+
+void eliminateCommonSubexpression(Expression *exprs, int n) {
+    for (int i = 0; i < n; i++) {
+        for (int j = i + 1; j < n; j++) {
+            if (strcmp(exprs[i].rhs, exprs[j].rhs) == 0) {
+                printf("%s = %s\n", exprs[j].lhs, exprs[i].lhs);
+                strcpy(exprs[j].rhs, exprs[i].lhs);
+            } else {
+                printf("%s = %s\n", exprs[j].lhs, exprs[j].rhs);
+            }
+        }
+    }
+}
+
+int main() {
+    int n;
+    printf("Enter the number of expressions: ");
+    scanf("%d", &n);
+
+    Expression exprs[n];
+
+    for (int i = 0; i < n; i++) {
+        printf("Enter the left-hand side and right-hand side of expression %d: ", i + 1);
+        scanf("%s = %s", exprs[i].lhs, exprs[i].rhs);
+    }
+
+    eliminateCommonSubexpression(exprs, n);
+    return 0;
+}
