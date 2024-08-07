@@ -1,0 +1,26 @@
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+
+void generateThreeAddressCode(char *expr) {
+    int tempCount = 1;
+    char *token = strtok(expr, "+-*/");
+
+    while (token != NULL) {
+        if (tempCount == 1)
+            printf("t%d = %s\n", tempCount++, token);
+        else
+            printf("t%d = t%d %c %s\n", tempCount, tempCount-1, *(token-1), token);
+
+        token = strtok(NULL, "+-*/");
+    }
+}
+
+int main() {
+    char expr[100];
+    printf("Enter an expression: ");
+    scanf("%s", expr);
+
+    generateThreeAddressCode(expr);
+    return 0;
+}
