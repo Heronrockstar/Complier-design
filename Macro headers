@@ -1,0 +1,26 @@
+%{
+#include <stdio.h>
+
+int macro_count = 0;
+int header_count = 0;
+%}
+
+%%
+
+#define [a-zA-Z0-9_]+ { macro_count++; }
+#include [<"][a-zA-Z0-9_.]+[>"] { header_count++; }
+
+%%
+
+int main()
+{
+    yylex();
+    printf("Macros: %d\n", macro_count);
+    printf("Headers: %d\n", header_count);
+    return 0;
+}
+
+int yywrap()
+{
+    return 1;
+}
