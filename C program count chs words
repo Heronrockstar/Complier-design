@@ -1,0 +1,39 @@
+#include <stdio.h>
+#include <ctype.h>
+
+void lexicalAnalyzer(char *str) {
+    int characters = 0, words = 0, lines = 0;
+    int inWord = 0;
+
+    for (int i = 0; str[i] != '\0'; i++) {
+        characters++;
+
+        if (str[i] == '\n')
+            lines++;
+
+        if (isspace(str[i])) {
+            if (inWord) {
+                words++;
+                inWord = 0;
+            }
+        } else {
+            inWord = 1;
+        }
+    }
+
+    if (inWord)
+        words++;
+
+    printf("Characters: %d\n", characters);
+    printf("Words: %d\n", words);
+    printf("Lines: %d\n", lines);
+}
+
+int main() {
+    char str[1000];
+    printf("Enter text: ");
+    fgets(str, sizeof(str), stdin);
+
+    lexicalAnalyzer(str);
+    return 0;
+}
