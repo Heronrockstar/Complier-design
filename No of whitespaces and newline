@@ -1,0 +1,22 @@
+%{
+#include <stdio.h>
+
+int whitespace_count = 0;
+int newline_count = 0;
+
+%}
+
+%%
+
+[ \t]        { whitespace_count++; }
+\n           { newline_count++; }
+.|\n         ;  // Ignore all other characters
+
+%%
+
+int main() {
+    yylex();
+    printf("Number of whitespaces: %d\n", whitespace_count);
+    printf("Number of newlines: %d\n", newline_count);
+    return 0;
+}
