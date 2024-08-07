@@ -1,0 +1,31 @@
+%{
+#include <stdio.h>
+#include <string.h>
+
+int count = 0;
+char word[100];
+
+%}
+
+%%
+
+{word}  { count++; }
+.|\n    ;
+
+%%
+
+int main(int argc, char *argv[]) {
+    if (argc < 3) {
+        printf("Usage: %s <word> <input>\n", argv[0]);
+        return 1;
+    }
+    strcpy(word, argv[1]);
+    yyin = fopen(argv[2], "r");
+    if (!yyin) {
+        perror("fopen");
+        return 1;
+    }
+    yylex();
+    printf("Frequency of '%s': %d\n", word, count);
+    return 0;
+}
